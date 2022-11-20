@@ -84,10 +84,9 @@ pub fn handle_signal(pid: pid_t, attach: c_uint, options: c_int) -> Result<c_int
                 }
 
                 0 => {
-                    let siginfo = get_siginfo(pid)?;
-                    let si_code = siginfo.si_code;
                     if options & PTRACE_O_TRACESYSGOOD == 0 {
-                        assert!(si_code != SYSCALL_SIGTRAP);
+                        let siginfo = get_siginfo(pid)?;
+                        let si_code = siginfo.si_code;
 
                         if si_code == SIGTRAP {
                             return Ok(SYSCALL_SIGTRAP);
