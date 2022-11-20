@@ -88,7 +88,12 @@ pub fn handle_signal(pid: pid_t, attach: c_uint, options: c_int) -> Result<c_int
                         let siginfo = get_siginfo(pid)?;
                         let si_code = siginfo.si_code;
 
-                        if si_code == SIGTRAP || si_code == SYSCALL_SIGTRAP {
+                        if si_code == SIGTRAP {
+                            return Ok(SYSCALL_SIGTRAP);
+                        }
+
+                        if si_code == SYSCALL_SIGTRAP {
+                            warn!("si_code == SYSCALL_SIGTRAP. reachable?");
                             return Ok(SYSCALL_SIGTRAP);
                         }
                     }
